@@ -1,11 +1,15 @@
 package com.danielrodrigues.app.entity;
 
+import com.danielrodrigues.app.utils.BCryptUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 
 @Entity
 @Table( name="users" )
@@ -24,10 +28,14 @@ public class User {
     @Column(name = "secret_key", nullable = false)
     private String key;
 
-    public User(Long id, String username, String token) {
-        this.id = id;
+    public User(String username, String token) {
         this.username = username;
         this.token = token;
+        try {
+            generateKey();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Long getId() {
@@ -54,5 +62,13 @@ public class User {
         this.token = token;
     }
 
+    public String getKey() {
+        return key;
+    }
 
+    public void generateKey() throws Exception {
+        byte[] keyRaw = username.getBytes("UTF-8");
+        SecretKeySpec keySpec = new SecretKeySpec(keyRaw, "AES");
+        this.key = BCryptUtil.encrypt(keySpec, token);
+    }
 }
