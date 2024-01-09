@@ -23,6 +23,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Response> register(@RequestBody User user) {
         try {
+            
             if(user.getUsername() == null || user.getToken() == null) {
                 return ResponseEntity
                         .status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -45,19 +46,22 @@ public class AuthController {
             }
 
             authService.cadastrarUsuario(user);
-            //TODO: Corrigir criptografia do token
-            //TODO: Salvar token criptografado no banco
-            //TODO: Salvar secret key para  descriptografar token no banco.
-            //TODO: salvar usuario no banco
+            
             //TODO: tratar excecoes e erros.
             //TODO: retornar a url de acesso do usuario as stats.
+
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new Response<>("Cadastro realizado com sucesso!", HttpStatus.OK.value()));
+        
         } catch (RegisteredUserException e) {
+           return ResponseEntity
+                   .status(e.code)
+                   .body(new Response<>(e.getMessage(), e.code.value()));
+        } catch (Exception e) {
             return ResponseEntity
-                    .status(e.code)
-                    .body(new Response<>(e.getMessage(), e.code.value()));
+                   .status(HttpStatus.BAD_REQUEST)
+                   .body(new Response<>("Erro interno ao cadastrar usuario!", HttpStatus.BAD_REQUEST.value()));
         }
 
     }
