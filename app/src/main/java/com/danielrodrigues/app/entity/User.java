@@ -35,6 +35,7 @@ public class User {
         BCryptDTO bCryptDTO = bCryptUtil.encrypt(token);
         this.token = bCryptDTO.token;
         this.key = bCryptDTO.secretKey;
+        System.out.println(this.key);
     }
 
     public Long getId() {

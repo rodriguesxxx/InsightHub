@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danielrodrigues.app.dto.UserDTO;
 import com.danielrodrigues.app.entity.User;
 import com.danielrodrigues.app.models.Response;
+import com.danielrodrigues.app.utils.BaseUrlUtil;
 import com.danielrodrigues.app.utils.RequestGithubApiUtil;
 
 @RestController
@@ -21,17 +23,16 @@ public class AuthController {
     protected IAuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody User user) {
+    public ResponseEntity<Response> register(@RequestBody UserDTO userDTO) {
         try {
-            
-            if(user.getUsername() == null || user.getToken() == null) {
+            if(userDTO.username() == null || userDTO.token() == null) {
                 return ResponseEntity
                         .status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(new Response<>("Informe todos campos!", HttpStatus.UNPROCESSABLE_ENTITY.value()));
             }
 
-            boolean isValidUsername = RequestGithubApiUtil.isValidUsername(user.getUsername());
-            boolean isValidToken = RequestGithubApiUtil.isValidToken(user.getToken());
+            boolean isValidUsername = RequestGithubApiUtil.isValidUsername(userDTO.username());
+            boolean isValidToken = RequestGithubApiUtil.isValidToken(userDTO.token());
 
             if(!isValidUsername) {
                 return ResponseEntity
@@ -44,12 +45,11 @@ public class AuthController {
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("O token não existe!", HttpStatus.NOT_FOUND.value()));
             }
-
+            User user = new User(userDTO.username(), userDTO.token());
             authService.cadastrarUsuario(user);
             
-            //TODO: tratar excecoes e erros.
             //TODO: retornar a url de acesso do usuario as stats.
-
+            // String statsUrl = BaseUrlUtil.getUrl() + "/stats/" + user.getUsername();
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new Response<>("Cadastro realizado com sucesso!", HttpStatus.OK.value()));
@@ -59,6 +59,7 @@ public class AuthController {
                    .status(e.code)
                    .body(new Response<>(e.getMessage(), e.code.value()));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity
                    .status(HttpStatus.BAD_REQUEST)
                    .body(new Response<>("Erro interno ao cadastrar usuario!", HttpStatus.BAD_REQUEST.value()));
