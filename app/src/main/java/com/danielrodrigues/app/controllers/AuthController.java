@@ -19,8 +19,15 @@ import com.danielrodrigues.app.utils.RequestGithubApiUtil;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
     @Autowired
     protected IAuthService authService;
+
+    @Autowired
+    protected RequestGithubApiUtil requestGithubApiUtil;
+
+    @Autowired 
+    protected BaseUrlUtil baseUrlUtil;
 
     @PostMapping("/register")
     public ResponseEntity<Response> register(@RequestBody UserDTO userDTO) {
@@ -31,8 +38,8 @@ public class AuthController {
                         .body(new Response<>("Informe todos campos!", HttpStatus.UNPROCESSABLE_ENTITY.value()));
             }
 
-            boolean isValidUsername = RequestGithubApiUtil.isValidUsername(userDTO.username());
-            boolean isValidToken = RequestGithubApiUtil.isValidToken(userDTO.token());
+            boolean isValidUsername = requestGithubApiUtil.isValidUsername(userDTO.username());
+            boolean isValidToken = requestGithubApiUtil.isValidToken(userDTO.token());
 
             if(!isValidUsername) {
                 return ResponseEntity
@@ -45,11 +52,11 @@ public class AuthController {
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("O token não existe!", HttpStatus.NOT_FOUND.value()));
             }
+            
             User user = new User(userDTO.username(), userDTO.token());
             authService.cadastrarUsuario(user);
             
-            //TODO: retornar a url de acesso do usuario as stats.
-            String statsUrl = BaseUrlUtil.getUrl() + "/stats/" + user.getUsername();
+            String statsUrl = baseUrlUtil.getUrl() + "/stats/" + user.getUsername();
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new Response<>("Cadastro realizado com sucesso!", HttpStatus.OK.value(), statsUrl));

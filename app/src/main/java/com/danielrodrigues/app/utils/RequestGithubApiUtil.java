@@ -6,15 +6,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+@Component
 public class RequestGithubApiUtil {
     
-    private static String baseUrl = "https://api.github.com";
-    private static RestTemplate restTemplate = new RestTemplate();
+    private String baseUrl = "https://api.github.com";
+    private RestTemplate restTemplate = new RestTemplate();
 
-    public static boolean isValidUsername(String username)
+    public boolean isValidUsername(String username)
     {
         String endpoint = baseUrl + "/users/" + username;
         try {
@@ -26,7 +28,7 @@ public class RequestGithubApiUtil {
         
     }
 
-    public static boolean isValidToken(String token) {
+    public boolean isValidToken(String token) {
         String endpoint = baseUrl + "/user";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);

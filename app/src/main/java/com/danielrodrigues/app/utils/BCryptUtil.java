@@ -12,7 +12,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 public class BCryptUtil {
+    
     private SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public BCryptDTO encrypt(String value) {
         String generateToken = Jwts.builder()

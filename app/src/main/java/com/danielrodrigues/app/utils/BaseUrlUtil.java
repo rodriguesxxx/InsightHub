@@ -8,16 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 @Component
 public class BaseUrlUtil {
 
-    private static HttpServletRequest request;
-    
-    public BaseUrlUtil() {}
-
     @Autowired
-    public BaseUrlUtil(HttpServletRequest request) {
-        BaseUrlUtil.request = request;
-    }
-    
-    public static String getUrl() {
+    private HttpServletRequest request;
+     
+    public String getUrl() {
         String scheme = request.getScheme();
         String serverName = request.getServerName();
         int serverPort = request.getServerPort();
