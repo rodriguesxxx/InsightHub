@@ -4,6 +4,8 @@ import java.util.Base64;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.stereotype.Component;
+
 import com.danielrodrigues.app.dto.BCryptDTO;
 
 import io.jsonwebtoken.Jwts;

@@ -49,10 +49,10 @@ public class AuthController {
             authService.cadastrarUsuario(user);
             
             //TODO: retornar a url de acesso do usuario as stats.
-            // String statsUrl = BaseUrlUtil.getUrl() + "/stats/" + user.getUsername();
+            String statsUrl = BaseUrlUtil.getUrl() + "/stats/" + user.getUsername();
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new Response<>("Cadastro realizado com sucesso!", HttpStatus.OK.value()));
+                    .body(new Response<>("Cadastro realizado com sucesso!", HttpStatus.OK.value(), statsUrl));
         
         } catch (RegisteredUserException e) {
            return ResponseEntity
