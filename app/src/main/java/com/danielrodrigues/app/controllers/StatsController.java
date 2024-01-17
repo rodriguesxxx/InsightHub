@@ -30,17 +30,21 @@ public class StatsController {
     @GetMapping("/{username}")
     public ResponseEntity<Response> getStatesByUsername(@PathVariable String username) {
 
-        User user = userRepository.findByUsername(username);
-        if(user == null) {
-            return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new Response<>("Usuario não encontrado!", HttpStatus.NOT_FOUND.value()));
+        try {
+            User user = userRepository.findByUsername(username);
+            if(user == null) {
+                return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Usuario não encontrado!", HttpStatus.NOT_FOUND.value()));
+            }
+            
+            Stats stats = statsService.getStats(user);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response<>("Estatísticas do usuário " + username, HttpStatus.OK.value(), stats));
+
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<>("Erro ao buscar estatísticas do usuário " + username, HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
         
-        statsService.getStats(user);
-        
-        //TODO: tratar lancamento de excecoes e erros.      
-        return ResponseEntity.status(HttpStatus.OK).body(new Response<>("Estatísticas do usuário " + username, HttpStatus.OK.value()));
     }
 
 }

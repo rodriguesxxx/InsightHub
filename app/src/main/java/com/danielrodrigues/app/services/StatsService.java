@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.danielrodrigues.app.dto.BCryptDTO;
 import com.danielrodrigues.app.entity.User;
-import com.danielrodrigues.app.exceptions.RegisteredUserException;
 import com.danielrodrigues.app.models.Stats;
 import com.danielrodrigues.app.utils.BCryptUtil;
 import com.danielrodrigues.app.utils.RequestGithubApiUtil;
@@ -20,9 +19,6 @@ public class StatsService implements IStatsService {
     @Autowired
     protected RequestGithubApiUtil requestGithubApiUtil;
 
-    //TODO: fazer requisicoes a API do github.
-    //TODO: retornar estatisticas do usuario.
-
     public Stats getStats(User user) {
         BCryptDTO bCryptDTO = new BCryptDTO(user.getToken(), user.getKey());
         String token = bCryptUtil.decrypt(bCryptDTO);
@@ -33,7 +29,7 @@ public class StatsService implements IStatsService {
         int commitsCount = requestGithubApiUtil.getCommitsCount();
         int issuesCount = requestGithubApiUtil.getIssuesCount();
         int pullRequestCount = requestGithubApiUtil.getPRsCount();
-        
-        return null;
+
+        return new Stats(commitsCount, issuesCount, pullRequestCount);
     }
 }
