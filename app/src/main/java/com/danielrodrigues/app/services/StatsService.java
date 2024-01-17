@@ -26,9 +26,13 @@ public class StatsService implements IStatsService {
     public Stats getStats(User user) {
         BCryptDTO bCryptDTO = new BCryptDTO(user.getToken(), user.getKey());
         String token = bCryptUtil.decrypt(bCryptDTO);
+        
         requestGithubApiUtil.setToken(token);
         requestGithubApiUtil.setUsername(user.getUsername());
+        
         int commitsCount = requestGithubApiUtil.getCommitsCount();
+        int issuesCount = requestGithubApiUtil.getIssuesCount();
+        int pullRequestCount = requestGithubApiUtil.getPRsCount();
         
         return null;
     }

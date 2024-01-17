@@ -1,5 +1,8 @@
 package com.danielrodrigues.app.utils;
 
+import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -65,6 +68,40 @@ public class RequestGithubApiUtil {
 
     public int getCommitsCount() {
         String endpoint = baseUrl + "/search/commits?q=author:"+username;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        try {
+            ResponseEntity<GithubResponse> response = restTemplate.exchange(
+                endpoint, 
+                HttpMethod.GET, 
+                entity, 
+                GithubResponse.class);
+            return response.getBody().getTotalCount();
+        } catch(Exception e) {
+            return 0;
+        }
+    }
+
+    public int getIssuesCount() {
+        String endpoint = baseUrl + "/search/issues?q=author:"+username;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        try {
+            ResponseEntity<GithubResponse> response = restTemplate.exchange(
+                endpoint, 
+                HttpMethod.GET, 
+                entity, 
+                GithubResponse.class);
+            return response.getBody().getTotalCount();
+        } catch(Exception e) {
+            return 0;
+        }
+    }
+
+    public int getPRsCount() {
+        String endpoint = baseUrl + "/search/issues?q=author:"+username+"+type:pr";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<String> entity = new HttpEntity<>(headers);
