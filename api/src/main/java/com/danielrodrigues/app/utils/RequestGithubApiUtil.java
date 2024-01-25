@@ -2,6 +2,8 @@ package com.danielrodrigues.app.utils;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -66,6 +68,7 @@ public class RequestGithubApiUtil {
         }
     }
 
+    @Cacheable("commits")
     public int getCommitsCount() {
         String endpoint = baseUrl + "/search/commits?q=author:"+username;
         HttpHeaders headers = new HttpHeaders();
@@ -83,6 +86,7 @@ public class RequestGithubApiUtil {
         }
     }
 
+    @Cacheable("issues")
     public int getIssuesCount() {
         String endpoint = baseUrl + "/search/issues?q=author:"+username;
         HttpHeaders headers = new HttpHeaders();
@@ -100,6 +104,7 @@ public class RequestGithubApiUtil {
         }
     }
 
+    @Cacheable("prs")
     public int getPRsCount() {
         String endpoint = baseUrl + "/search/issues?q=author:"+username+"+type:pr";
         HttpHeaders headers = new HttpHeaders();

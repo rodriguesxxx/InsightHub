@@ -66,7 +66,6 @@ public class AuthController {
                    .status(e.code)
                    .body(new Response<>(e.getMessage(), e.code.value()));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity
                    .status(HttpStatus.BAD_REQUEST)
                    .body(new Response<>("Erro interno ao cadastrar usuario!", HttpStatus.BAD_REQUEST.value()));
