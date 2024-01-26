@@ -1,0 +1,15 @@
+{
+  "name": "readme-stats",
+  "version": "1.0.0",
+  "description": "frontend version",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Rodrigues",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  }
+}
