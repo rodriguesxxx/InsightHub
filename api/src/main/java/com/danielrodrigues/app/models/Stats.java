@@ -1,6 +1,8 @@
 package com.danielrodrigues.app.models;
 
-public class Stats {
+import java.io.Serializable;
+
+public class Stats implements Serializable {
     private int commits;
     private int issues;
     private int pullRequests;

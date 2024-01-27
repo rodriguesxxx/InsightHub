@@ -2,6 +2,7 @@ package com.danielrodrigues.app.utils;
 
 import java.util.List;
 
+import com.danielrodrigues.app.models.Stats;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
@@ -80,7 +81,7 @@ public class RequestGithubApiUtil {
                 HttpMethod.GET, 
                 entity, 
                 GithubResponse.class);
-            return response.getBody().getTotalCount();
+           return response.getBody().getTotalCount();
         } catch(Exception e) {
             return 0;
         }
