@@ -33,6 +33,10 @@ The insight hub API is completely free.
 
     Enter your database information
 
+-   **_I started a redis docker image_:**
+    ```bash
+    docker run --name insighthub-redis -p 6379:6379 -d redis
+    ```
 -   **_start the api_:**
 
     ```bash
